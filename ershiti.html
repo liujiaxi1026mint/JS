@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>第二十题</title>
+    <style type="text/css">
+    * {
+            padding: 0px;
+            margin: 0px;
+        }
+        
+        ul,
+        li {
+            list-style: none;
+        }
+        
+        div {
+            display: block;
+        }
+        
+        .box {
+            width: 590px;
+            height: 470px;
+            border: none;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slider {
+            width: 4720px;
+            position: absolute;
+        }
+        
+        .slide {
+            width: 590px;
+            overflow: hidden;
+            float: left;
+        }
+        
+        .box>span {
+            width: 30px;
+            height: 50px;
+            text-align: center;
+            cursor: pointer;
+            top: 175px;
+            line-height: 50px;
+            background: rgb(56, 51, 51);
+            font-size: 30px;
+            position: absolute;
+        }
+        
+        #left {
+            left: 0px;
+            border-radius: 0% 300% 300% 0%;
+        }
+        
+        #right {
+            right: 0px;
+            border-radius: 300% 0% 0% 300%;
+        }
+        
+        .nav {
+            position: absolute;
+            left: 30px;
+            bottom: 20px;
+        }
+        
+        .nav>li {
+            float: left;
+            width: 10px;
+            height: 10px;
+            background: #ccc;
+            cursor: pointer;
+            margin: 3px;
+            border-radius: 100%;
+        }
+        
+        .nav .active {
+            background: white;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="box">
+        <div class="slider" id="slider">
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image1.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image2.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image3.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image4.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image5.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image6.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image7.jpg" alt=""></div>
+            <div class="slide"><img src="C:\学习\js进阶\作业与练习\第20题/image8.jpg" alt=""></div>
+        </div>
+        <span id="left" style="opacity: 0.5;"><</span>
+        <span id="right" style="opacity: 0.5;">></span>
+        <ul class="nav" id="nav">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <script src="C:\学习\js进阶\作业与练习\第20题/jquery.js"></script>
+    <script>
+        $(document).ready(function() {
+            var index = 0;
+            var stop = false;
+            var $li = $("#box").find("#slider").children(".slide");
+            var $page = $("#box").find("#nav").children("li");
+            $page.hover(function() {
+                index = $(this).index();
+                $(this).addClass("active").stop(true, true).siblings().removeClass("active");
+                $li.eq(index).stop(true, true).fadeIn(1000).siblings().fadeOut(1000);
+            });
+            //左边点击按钮
+            $("#left").click(function() {
+                clearInterval(timer);
+                index--;
+                if (index < 0) {
+                    index = $li.length - 1;
+                }
+                $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+                $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+            });
+            //右边点击按钮
+            $("#right").click(function() {
+                clearInterval(timer);
+                index++;
+                if (index > $li.length - 1) {
+                    index = 0;
+                }
+                $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+                $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+            });
+            //自动轮播图片
+            var timer = setInterval(function() {
+                if (stop) return;
+                index++;
+                if (index > $li.length - 1) {
+                    index = 0;
+                }
+                $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+                $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+            }, 5000);
+            //鼠标移入图片内，自动轮播停止
+            $("#box").mousemove(function() {
+                clearInterval(timer);
+            }).mouseout(function() {
+                timer = setInterval(function() {
+                    if (stop) return;
+                    index++;
+                    if (index > $li.length - 1) {
+                        index = 0;
+                    }
+                    $li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+                    $page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+
+</html>
